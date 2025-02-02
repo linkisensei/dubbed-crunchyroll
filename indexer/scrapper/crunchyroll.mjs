@@ -50,9 +50,9 @@ async function requestToken(){
     const response = await gotoExtended(INTERNAL.page, { url, method: 'POST', postData: formData, headers });
 
     if (!response || !response.access_token) {
-        console.error("Erro ao obter token:", response);
+        console.error("Error getting token:", response);
         await INTERNAL.browser.close();
-        throw new Error("Não foi possível obter o token de acesso");
+        throw new Error("Unable to get access token");
     }
 
     return response;
@@ -66,7 +66,7 @@ export async function getAnimes() {
         'Accept': 'application/json'
     };
 
-    console.log(headers);
+    console.info(`Listing animes...`);
 
     return gotoExtended(INTERNAL.page, {
         url: `${BASE_URL}/content/v2/discover/browse?n=1000&type=series&is_dubbed=true`,
@@ -76,7 +76,7 @@ export async function getAnimes() {
     });
 }
 
-export async function getAnimeInfo(animeId) {
+export async function getAnimeInfo(anime) {
     const token = await INTERNAL.getToken();
     const headers = {
         'Authorization': 'Bearer ' + token,
@@ -84,12 +84,20 @@ export async function getAnimeInfo(animeId) {
         'Accept': 'application/json'
     };
 
-    return gotoExtended(INTERNAL.page, {
-        url: `${BASE_URL}/content/v2/cms/series/${animeId}`,
+    console.info(`Getting information about "${anime.id}"`);
+
+    let response = await gotoExtended(INTERNAL.page, {
+        url: `${BASE_URL}/content/v2/cms/series/${anime.id}`,
         method: 'GET',
         headers,
         postData: null
     });
+
+    const data = response.data.pop();
+    anime.season_tags = data.season_tags ?? [];
+    anime.keywords = data.keywords ?? [];
+    anime.episode_count = data.episode_count ?? 0;
+    return anime;
 }
 
 
@@ -115,7 +123,7 @@ async function gotoExtended(page, request) {
             await page.setRequestInterception(false);
 
         } catch (error) {
-            console.error('Erro na interceptação da requisição:', error);
+            console.error('Error intercepting request:', error);
         }
     };
 
@@ -126,7 +134,7 @@ async function gotoExtended(page, request) {
             try {
                 jsonResponse = await response.json();
             } catch (error) {
-                console.error('Erro ao obter JSON da resposta:', error);
+                console.error('Error getting JSON from response:', error);
             }
         }
     });

@@ -10,12 +10,13 @@ function translateSerieToAnime(serie){
         title: serie.title,
         slug: serie.slug_title,
         description: serie.description,
-        seasonCount: serie.series_metadata.season_count,
-        year: serie.series_metadata.series_launch_year,
+        seasonCount: serie.series_metadata.season_count ?? serie.season_count,
+        year: serie.series_metadata.series_launch_year ?? serie.series_launch_year,
         lastReleaseDate: serie.last_public,
         image: serie.images.poster_wide.flat().find(image => image.width === 320).source,
         watchLink: "https://www.crunchyroll.com/series/" + serie.id,
         languages : serie.series_metadata.audio_locales,
+        keywords : serie.keywords ?? []
     };
 
     if(!!serie.season_tags){
@@ -49,16 +50,84 @@ async function updateAnime(anime){
     return updatedAnime;
 }
 
-async function getAnime(id, includeData = false){
+async function upsertAnime(anime){
+    const data = JSON.stringify(anime);
+    const lastReleaseDate = new Date(anime.lastReleaseDate);
+    const upsertedAnime = await prisma.anime.upsert({
+        where: { id : anime.id },
+            update: {
+                lastReleaseDate,
+                data,
+            },
+            create: {
+                id : anime.id,
+                lastReleaseDate,
+                data,
+            },
+    });
 
+    return upsertedAnime;
+}
+
+async function getAnime(id, includeData = false){
+    const select = {
+        id: true,
+        lastReleaseDate: true,
+        data : false,
+    };
+
+    if(includeData){
+        select.data = true;
+    }
+
+    const anime = await prisma.anime.findUnique({
+        where: { id },
+        select,
+    });
+
+    return anime;
 }
 
 async function main() {
   await crunchyrollScrapper.initPuppeteer();
 
   const animes = await crunchyrollScrapper.getAnimes();
+  let counter = 0;
+
+  while(animes.data.length > 0){
+    let anime = animes.data.pop();
+    let existing = null;
+
+    try {
+        existing = await getAnime(anime.id);
+    } catch (error) {
+        console.error(error);
+        existing = null;
+    }
+
+    if(existing && existing.lastReleaseDate >= new Date(anime.last_public)){
+        console.info(`Ignoring "${anime.id}"`);
+        continue;
+    }
+
+    try {
+        anime = await crunchyrollScrapper.getAnimeInfo(anime);
+    } catch (error) {
+        console.error(error);
+    }
+
+    try {
+        console.info(`Upserting "${anime.id}"`);
+        await upsertAnime(translateSerieToAnime(anime));
+        counter++;
+    } catch (error) {
+        console.error(error);
+    }
+  }
 
   await crunchyrollScrapper.closePuppeteer();
+
+  console.info(`Done. ${counter} animes upserted!`)
 }
 
 main()
