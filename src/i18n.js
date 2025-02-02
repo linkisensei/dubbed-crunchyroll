@@ -5,35 +5,235 @@ import LanguageDetector from "i18next-browser-languagedetector";
 const resources = {
   en: {
     translation: {
-    "site_title" : "Dubbed animes on Crunchyroll",
+      "site_title": "Dubbed animes on Crunchyroll",
       "all_seasons": "All",
       "spring": "Spring",
-      "summer" : "Summer",
-      "fall" : "Fall",
-      "winter" : "Winter",
+      "summer": "Summer",
+      "fall": "Fall",
+      "winter": "Winter",
+      "all_years": "All",
+      "year_label": "year",
+      "season_label": "season",
+      "language_label": "language",
+      "name_search_label": "name search",
+      "name_search_placeholder": "Enter the anime name...",
+      "launch_year": "release year",
+      "last_publication": "last release",
+      "seasons": "seasons",
+      "next": "next",
+      "previous": "previous",
+      "season_tag_text": "{{season}} {{year}}",
+      "disclaimer_text" : "This site is not affiliated with Crunchyroll and does not hold rights to any trademarks, names, or intellectual properties displayed. All information is sourced exclusively from the Crunchyroll API, and filters are applied based on the data provided by it.",
     }
   },
   pt: {
     translation: {
-        "site_title" : "Animes dublados na Crunchyroll",
+      "site_title": "Animes dublados na Crunchyroll",
       "all_seasons": "Todas",
       "spring": "Primavera",
-      "summer" : "Verão",
-      "fall" : "Outono",
-      "winter" : "Inverno",
+      "summer": "Verão",
+      "fall": "Outono",
+      "winter": "Inverno",
+      "all_years": "Todos",
+      "year_label": "ano",
+      "season_label": "estação do ano",
+      "language_label": "idioma",
+      "name_search_label": "busca por nome",
+      "name_search_placeholder": "Digite o nome do anime...",
+      "launch_year": "ano de lançamento",
+      "last_publication": "último lançamento",
+      "seasons": "temporadas",
+      "next": "próxima",
+      "previous": "anterior",
+      "season_tag_text": "{{season}} de {{year}}",
+      "disclaimer_text" : "Este site não é afiliado ao Crunchyroll e não detém direitos sobre nenhuma das marcas, nomes ou propriedades intelectuais exibidas. Todas as informações são obtidas exclusivamente da API do Crunchyroll, e os filtros são aplicados com base nos dados disponibilizados pela mesma.",
+    }
+  },
+  es: {
+    translation: {
+      "site_title": "Animes doblados en Crunchyroll",
+      "all_seasons": "Todas",
+      "spring": "Primavera",
+      "summer": "Verano",
+      "fall": "Otoño",
+      "winter": "Invierno",
+      "all_years": "Todas",
+      "year_label": "año",
+      "season_label": "temporada",
+      "language_label": "idioma",
+      "name_search_label": "búsqueda por nombre",
+      "name_search_placeholder": "Introduce el nombre del anime...",
+      "launch_year": "año de lanzamiento",
+      "last_publication": "último lanzamiento",
+      "seasons": "temporadas",
+      "next": "siguiente",
+      "previous": "anterior",
+      "season_tag_text": "{{season}} de {{year}}",
+      "disclaimer_text" : "Este sitio no está afiliado con Crunchyroll y no posee derechos sobre ninguna de las marcas, nombres o propiedades intelectuales mostradas. Toda la información se obtiene exclusivamente de la API de Crunchyroll, y los filtros se aplican con base en los datos proporcionados por la misma.",
+    }
+  },
+  ar: {
+    translation: {
+      "site_title": "الأنمي المدبلج على كرانشي رول",
+      "all_seasons": "الكل",
+      "spring": "الربيع",
+      "summer": "الصيف",
+      "fall": "الخريف",
+      "winter": "الشتاء",
+      "all_years": "الكل",
+      "year_label": "السنة",
+      "season_label": "الموسم",
+      "language_label": "اللغة",
+      "name_search_label": "بحث بالاسم",
+      "name_search_placeholder": "أدخل اسم الأنمي...",
+      "launch_year": "سنة الإصدار",
+      "last_publication": "آخر إصدار",
+      "seasons": "المواسم",
+      "next": "التالي",
+      "previous": "السابق",
+      "season_tag_text": "{{season}} {{year}}",
+    }
+  },
+  ru: {
+    translation: {
+      "site_title": "Дублированное аниме на Crunchyroll",
+      "all_seasons": "Все",
+      "spring": "Весна",
+      "summer": "Лето",
+      "fall": "Осень",
+      "winter": "Зима",
+      "all_years": "все",
+      "year_label": "год",
+      "season_label": "сезон",
+      "language_label": "язык",
+      "name_search_label": "поиск по названию",
+      "name_search_placeholder": "Введите название аниме...",
+      "launch_year": "год выпуска",
+      "last_publication": "последний выпуск",
+      "seasons": "сезоны",
+      "next": "следующий",
+      "previous": "предыдущий",
+      "season_tag_text": "{{season}} {{year}} года",
+    }
+  },
+  de: {
+    translation: {
+      "site_title": "Synchronisierte Animes auf Crunchyroll",
+      "all_seasons": "Alle",
+      "spring": "Frühling",
+      "summer": "Sommer",
+      "fall": "Herbst",
+      "winter": "Winter",
+      "all_years": "Alle",
+      "year_label": "Jahr",
+      "season_label": "Saison",
+      "language_label": "Sprache",
+      "name_search_label": "Namenssuche",
+      "name_search_placeholder": "Geben Sie den Namen des Animes ein...",
+      "launch_year": "Erscheinungsjahr",
+      "last_publication": "Letzte Veröffentlichung",
+      "seasons": "Jahreszeiten",
+      "next": "weiter",
+      "previous": "zurück",
+      "season_tag_text": "{{season}} {{year}}",
+    }
+  },
+  fr: {
+    translation: {
+      "site_title": "Animes doublés sur Crunchyroll",
+      "all_seasons": "Toutes",
+      "spring": "Printemps",
+      "summer": "Été",
+      "fall": "Automne",
+      "winter": "Hiver",
+      "all_years": "Toutes",
+      "year_label": "année",
+      "season_label": "saison",
+      "language_label": "langue",
+      "name_search_label": "recherche par nom",
+      "name_search_placeholder": "Entrez le nom de l'anime...",
+      "launch_year": "année de sortie",
+      "last_publication": "dernière sortie",
+      "seasons": "saisons",
+      "next": "suivant",
+      "previous": "précédent",
+      "season_tag_text": "{{season}} {{year}}",
+    }
+  },
+  hi: {
+    translation: {
+      "site_title": "क्रंची रोल पर डब किए गए एनीमे",
+      "all_seasons": "सभी",
+      "spring": "वसंत",
+      "summer": "गर्मी",
+      "fall": "शरद",
+      "winter": "सर्दी",
+      "all_years": "सभी",
+      "year_label": "वर्ष",
+      "season_label": "मौसम",
+      "language_label": "भाषा",
+      "name_search_label": "नाम खोजें",
+      "name_search_placeholder": "एनीमे का नाम दर्ज करें...",
+      "launch_year": "रिलीज़ वर्ष",
+      "last_publication": "अंतिम रिलीज़",
+      "seasons": "मौसम",
+      "next": "अगला",
+      "previous": "पिछला",
+      "season_tag_text": "{{year}} का {{season}}",
+    }
+  },
+  te: {
+    translation: {
+      "site_title": "క్రంచీరోల్‌లో డబ్బింగ్ అనిమే",
+      "all_seasons": "అన్నీ",
+      "spring": "వసంతం",
+      "summer": "ఎండాకాలం",
+      "fall": "పతనం",
+      "winter": "చలికాలం",
+      "all_years": "అన్నీ",
+      "year_label": "సంవత్సరం",
+      "season_label": "సీజన్",
+      "language_label": "భాష",
+      "name_search_label": "పేరు ద్వారా శోధించండి",
+      "name_search_placeholder": "అనిమే పేరు నమోదు చేయండి...",
+      "launch_year": "విడుదల సంవత్సరం",
+      "last_publication": "చివరి విడుదల",
+      "seasons": "సీజన్లు",
+      "next": "తర్వాతి",
+      "previous": "మునుపటి",
+      "season_tag_text": "{{year}} యొక్క {{season}}",
+    }
+  },
+  ta: {
+    translation: {
+      "site_title": "கிரஞ்சிரோலில் டப்பிங் செய்யப்பட்ட அனிமே",
+      "all_seasons": "அனைத்தும்",
+      "spring": "வசந்தம்",
+      "summer": "கோடை",
+      "fall": "இலையுதிர்",
+      "winter": "குளிர்காலம்",
+      "all_years": "அனைத்தும்",
+      "year_label": "ஆண்டு",
+      "season_label": "பருவம்",
+      "language_label": "மொழி",
+      "name_search_label": "பெயரால் தேடு",
+      "name_search_placeholder": "அனிமே பெயரை உள்ளிடவும்...",
+      "launch_year": "வெளியீட்டாண்டு",
+      "last_publication": "கடைசி வெளியீடு",
+      "seasons": "பருவங்கள்",
+      "next": "அடுத்தது",
+      "previous": "முந்தையது",
+      "season_tag_text": "{{year}}-இன் {{season}}",
     }
   }
 };
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    fallbackLng: "en",
-    interpolation: {
-      escapeValue: false
-    }
-  });
+i18n.use(LanguageDetector).use(initReactI18next).init({
+  resources,
+  fallbackLng: "en",
+  interpolation: {
+    escapeValue: false
+  }
+});
 
 export default i18n;
