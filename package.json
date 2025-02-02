@@ -8,9 +8,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "indexer": "node indexer/indexer.mjs",
+    "prisma:generate": "prisma generate --schema=indexer/prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema=indexer/prisma/schema.prisma"
   },
   "dependencies": {
+    "@prisma/client": "^6.3.0",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-progress": "^1.1.1",
     "@radix-ui/react-select": "^2.1.5",
@@ -21,6 +25,7 @@
     "i18next": "^24.2.2",
     "i18next-browser-languagedetector": "^8.0.2",
     "lucide-react": "^0.474.0",
+    "prisma": "^6.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.4.0",
@@ -39,6 +44,8 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "postcss": "^8",
+    "puppeteer": "^24.1.1",
+    "sqlite3": "^5.1.7",
     "tailwindcss": "^3.4.1",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
