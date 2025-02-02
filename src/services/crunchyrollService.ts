@@ -34,6 +34,7 @@ async function filterAnimes(filters : Filters, pageNumber : number): Promise<Pag
     };
 
     let year = !!filters.year ? parseInt(filters.year) : null;
+    let season = !!filters.season && filters.season != 'all' ? filters.season : null;
     let language = filters.language;
     let search = !!filters.search ? filters.search.trim() : null;
 
@@ -42,9 +43,22 @@ async function filterAnimes(filters : Filters, pageNumber : number): Promise<Pag
     let minIndex = (pageNumber -1) * PAGE_SIZE;
     let maxIndex = (pageNumber) * PAGE_SIZE;
 
-    if(year){
+    if(year && season){
+        const seasonTag = `${season}-${year}`;
         filterFunctions.push(function(anime: Anime) : boolean {
-            return anime.year == year;
+            return anime.seasonTags.includes(seasonTag);
+        });
+    }
+
+    if(year && !season){
+        filterFunctions.push(function(anime: Anime) : boolean {
+            return anime.year == year || !!anime.seasonTags.some(seasonTag => seasonTag.endsWith(year.toString()));
+        });
+    }
+
+    if(!year && season){
+        filterFunctions.push(function(anime: Anime) : boolean {
+            return !!anime.seasonTags.some(seasonTag => seasonTag.startsWith(season));
         });
     }
 

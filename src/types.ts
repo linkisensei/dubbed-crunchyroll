@@ -9,6 +9,9 @@ export interface Anime {
     image: string;
     watchLink: string;
     languages : string[];
+    keywords : string[];
+    seasonTags : string[];
+    episodeCount : number;
 }
 
 

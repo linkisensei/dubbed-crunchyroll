@@ -1,6 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import crunchyrollScrapper from "./scrapper/crunchyroll.mjs"
 import fs from 'fs';
+import { existsSync, mkdirSync } from "fs";
+import { resolve } from "path";
+import { fileURLToPath } from "url";
 
 const prisma = new PrismaClient();
 
@@ -16,11 +19,12 @@ function translateSerieToAnime(serie){
         image: serie.images.poster_wide.flat().find(image => image.width === 320).source,
         watchLink: "https://www.crunchyroll.com/series/" + serie.id,
         languages : serie.series_metadata.audio_locales,
-        keywords : serie.keywords ?? []
+        keywords : serie.keywords ?? [],
+        episodeCount : serie.episode_count ?? 0,
     };
 
     if(!!serie.season_tags){
-        anime.season_tags = serie.season_tags;
+        anime.seasonTags = serie.season_tags;
     }
 
     return anime;
@@ -88,6 +92,23 @@ async function getAnime(id, includeData = false){
     return anime;
 }
 
+async function exportAnimes(){
+    let animes = await prisma.anime.findMany({
+        orderBy: {
+            lastReleaseDate: "desc",
+        },
+    });
+
+    const __dirname = fileURLToPath(new URL(".", import.meta.url));
+    const destDir = resolve(__dirname, "../public/assets");
+    const destPath = resolve(destDir, "data.json");
+
+    mkdirSync(destDir, { recursive: true });
+
+    animes = animes.map((anime) => JSON.parse(anime.data));
+    fs.writeFileSync(destPath, JSON.stringify(animes), 'utf8');
+}
+
 async function main() {
   await crunchyrollScrapper.initPuppeteer();
 
@@ -128,6 +149,10 @@ async function main() {
   await crunchyrollScrapper.closePuppeteer();
 
   console.info(`Done. ${counter} animes upserted!`)
+
+  console.info(`Exporting animes to data.json...`);
+  await exportAnimes();
+  console.info(`Finished exporting animes to data.json!`);
 }
 
 main()

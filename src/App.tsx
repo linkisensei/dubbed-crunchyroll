@@ -6,22 +6,10 @@ import { Play, Loader2 } from "lucide-react";
 import crunchyrollService from "@/services/crunchyrollService";
 import { Anime, Filters, Page } from "@/types";
 import { Separator } from "@radix-ui/react-select";
-import { useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 import { formatDate } from "./lib/utils";
 
-const years = (() => {
-  const currentYear = new Date().getFullYear();
-  return ["Todos", ...Array.from({ length: currentYear - 2009 + 1 }, (_, i) => (currentYear - i).toString())];
-})();
-
-const seasons = [
-  { name: i18next.t("all_seasons"), value: "all" },
-  { name: i18next.t("spring"), value: "spring" },
-  { name: i18next.t("summer"), value: "summer" },
-  { name: i18next.t("fall"), value: "fall" },
-  { name: i18next.t("winter"), value: "winter" }
-];
 
 const languages = [
   { value: "pt-BR", name: "🇧🇷 Português (Brasil)" },
@@ -40,20 +28,60 @@ const languages = [
 
 export default function App() {
   const { t } = useTranslation();
+  const currentYear = new Date().getFullYear();
+  const [seasons, setSeasons] = useState<{ [key: string]: string }>({});
+  const [years, setYears] = useState<string[]>([]);
   const [items, setAnimes] = useState<Anime[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMorePages, setHasMorePages] = useState<boolean>(false);
   const [filters, setFilters] = useState<Filters>({
-    year: years[1],
+    year: currentYear.toString(),
     season: "all",
     language: "pt-BR",
     search: ""
   });
   const [loading, setLoading] = useState<boolean>(false);
+  const [stringsLoaded, setStringsLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (i18next.isInitialized) {
+      setSeasons({
+        all: t("all_seasons"),
+        spring: t("spring"),
+        summer: t("summer"),
+        fall: t("fall"),
+        winter: t("winter"),
+      });
+
+      setYears([
+        t("all_years"),
+        ...Array.from({ length: currentYear - 2009 + 1 }, (_, i) => (currentYear - i).toString()),
+      ]);
+
+      setStringsLoaded(true);
+    } else {
+      i18next.on("initialized", () => {
+        setSeasons({
+          all: t("all_seasons"),
+          spring: t("spring"),
+          summer: t("summer"),
+          fall: t("fall"),
+          winter: t("winter"),
+        });
+
+        setYears([
+          t("all_years"),
+          ...Array.from({ length: currentYear - 2009 + 1 }, (_, i) => (currentYear - i).toString()),
+        ]);
+
+        setStringsLoaded(true);
+      });
+    }
+  }, []);
   
   useEffect(() => {
     setLoading(true);
-    crunchyrollService.filterAnimes(filters, page).then((page) => {
+    crunchyrollService.filterAnimes(filters, page).then((page : Page) => {
       setAnimes(page.animes);
       setHasMorePages(page.hasMorePages);
       setLoading(false);
@@ -64,6 +92,14 @@ export default function App() {
     setFilters({ ...filters, [e.target.name]: e.target.value });
     setPage(1);
   };
+
+  if(!stringsLoaded){
+    return <div className="bg-[#37415C] min-h-screen">
+      <div className="flex justify-center my-10">
+        <Loader2 className="w-10 h-10 animate-spin text-gray-500" />
+      </div>
+    </div>;
+  }
 
   return (
     <div className="bg-[#37415C] min-h-screen">
@@ -86,13 +122,13 @@ export default function App() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Estação do ano</label>
-              <Select value={filters.season} disabled={true} onValueChange={(value) => setFilters({ ...filters, season: value })}>
+              <Select value={filters.season} onValueChange={(value) => setFilters({ ...filters, season: value })}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {seasons.map((season) => (
-                    <SelectItem key={season.name} value={season.value}>{season.name}</SelectItem>
+                  {Object.keys(seasons).map((season) => (
+                    <SelectItem key={season} value={season}>{seasons[season]}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
