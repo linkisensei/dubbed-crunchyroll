@@ -7,7 +7,7 @@ on:
 
   # Runs every day at 04:00 UTC
   schedule:
-    - cron: "*/3 * * * *"
+    - cron: "0 4 * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
