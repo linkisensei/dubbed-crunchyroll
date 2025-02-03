@@ -30,7 +30,10 @@ const INTERNAL = {
 }
 
 export async function initPuppeteer(){
-    INTERNAL.browser = await puppeteer.launch({ headless: true });
+    INTERNAL.browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     INTERNAL.page = await INTERNAL.browser.newPage();
 }
 
