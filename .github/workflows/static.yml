@@ -5,7 +5,7 @@ on:
   push:
     branches: ["master"]
 
-  # Runs every day at 00:00 UTC
+  # Runs every day at 04:00 UTC
   schedule:
     - cron: "4 0 * * *"
 
