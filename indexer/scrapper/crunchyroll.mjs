@@ -72,7 +72,7 @@ export async function getAnimes() {
     console.info(`Listing animes...`);
 
     return gotoExtended(INTERNAL.page, {
-        url: `${BASE_URL}/content/v2/discover/browse?n=1000&type=series&is_dubbed=true`,
+        url: `${BASE_URL}/content/v2/discover/browse?n=1400&type=series&is_dubbed=true`,
         method: 'GET',
         headers,
         postData: null
