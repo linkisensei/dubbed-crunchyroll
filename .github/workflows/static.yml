@@ -41,8 +41,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Init prisma
-        run: npx prisma generate
+      - name: Prisma generate
+        run: npm run prisma:generate
 
       - name: Run production build
         run: npm run build
