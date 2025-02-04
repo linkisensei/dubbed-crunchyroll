@@ -221,6 +221,7 @@ async function exportAnimes(){
         });
     }
 
+
     // Saving files:
     languages.forEach((language) => {
         const destPath = resolve(destDir, `${language}.json`);
