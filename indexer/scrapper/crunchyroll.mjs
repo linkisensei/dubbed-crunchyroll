@@ -61,7 +61,7 @@ async function requestToken(){
     return response;
 }
 
-export async function getAnimes() {
+export async function getAnimes(locale = "") {
     const token = await INTERNAL.getToken();
     const headers = {
         'Authorization': 'Bearer ' + token,
@@ -69,10 +69,17 @@ export async function getAnimes() {
         'Accept': 'application/json'
     };
 
-    console.info(`Listing animes...`);
+    let localeQuery = '';
+    
+    if(!!locale){
+        console.info(`Listing animes for "${locale}"...`);
+        localeQuery = `&locale=${locale}`;
+    }else{
+        console.info(`Listing animes...`);
+    }
 
     return gotoExtended(INTERNAL.page, {
-        url: `${BASE_URL}/content/v2/discover/browse?n=1400&type=series&is_dubbed=true`,
+        url: `${BASE_URL}/content/v2/discover/browse?n=1400&type=series&is_dubbed=true${localeQuery}`,
         method: 'GET',
         headers,
         postData: null

@@ -28,23 +28,33 @@ const languages = [
   { value: "ta-IN", name: "🇮🇳 தமிழ் (இந்தியா)" }
 ];
 
+function getLanguageFromBrowserLanguage(lang : string) : string {
+  return languages.find((l) => l.value == lang) ? lang : "en-US";
+}
+
 export default function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const currentYear = new Date().getFullYear();
   const [seasons, setSeasons] = useState<{ [key: string]: string }>({});
   const [years, setYears] = useState<string[]>([]);
   const [items, setAnimes] = useState<Anime[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMorePages, setHasMorePages] = useState<boolean>(false);
-  const browserLang = i18next.language || "en";
+  const [currentLang, setcurrentLang] = useState<string>(i18next.language);
+
   const [filters, setFilters] = useState<Filters>({
     year: currentYear.toString(),
     season: "all",
-    language: browserLang,
+    language: currentLang,
     search: ""
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [stringsLoaded, setStringsLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    const language = getLanguageFromBrowserLanguage(i18n.language);
+    crunchyrollService.setLanguage(language);
+  }, [currentLang]);
 
   useEffect(() => {
     if (i18next.isInitialized) {
@@ -83,6 +93,10 @@ export default function App() {
   }, []);
   
   useEffect(() => {
+    if(!setStringsLoaded){
+      return;
+    }
+
     setLoading(true);
     crunchyrollService.filterAnimes(filters, page).then((page : Page) => {
       setAnimes(page.animes);

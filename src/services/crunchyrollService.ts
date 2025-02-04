@@ -3,15 +3,20 @@ import { Anime, Filters, Page } from "@/types";
 const DATA = {
     total : 0,
     data : [],
+    language : '',
 };
 
 const PAGE_SIZE = 20;
 
 async function loadData(){
-    const data = await fetch("/assets/data.json")
+    if(!DATA.language){
+        return;
+    }
+
+    const data = await fetch(`/assets/${DATA.language}.json`)
         .then((response) => {
             if (!response.ok) {
-            throw new Error("Failed to fetch data");
+                throw new Error("Failed to fetch data");
             }
             return response.json();
         });
@@ -98,6 +103,15 @@ async function filterAnimes(filters : Filters, pageNumber : number): Promise<Pag
     return page;
 }
 
+function setLanguage(language : string){
+    if(language != DATA.language){
+        DATA.language = language;
+        DATA.total = 0;
+        DATA.data = [];
+    }    
+}
+
 export default {
     filterAnimes,
+    setLanguage,
 };
