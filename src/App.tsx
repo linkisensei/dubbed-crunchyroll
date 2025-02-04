@@ -40,7 +40,7 @@ export default function App() {
   const [items, setAnimes] = useState<Anime[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMorePages, setHasMorePages] = useState<boolean>(false);
-  const [currentLang, setcurrentLang] = useState<string>(i18next.language);
+  const [currentLang] = useState<string>(i18next.language);
 
   const [filters, setFilters] = useState<Filters>({
     year: currentYear.toString(),
