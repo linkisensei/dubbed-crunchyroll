@@ -13,7 +13,8 @@ async function loadData(){
         return;
     }
 
-    const data = await fetch(`/assets/${DATA.language}.json`)
+    const basePath = window.location.pathname.replace(/\/+$/, '');
+    const data = await fetch(`${basePath}/assets/${DATA.language}.json`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Failed to fetch data");
